@@ -12,13 +12,16 @@ namespace Shop.Core.Entities
         //private static int num_customer;
         [Key]
         public int Id { get; set; }
-        public string identity { get; set; }
-        public string name { get; set; }
-        public string phone { get; set; }
-        public string city { get; set; }
-        public string address { get; set; }
-        public DateTime birthday { get; set; }
-        public ClubCard ClubCard { get; set; }
+        public string Identity { get; set; }
+        public string Name { get; set; }
+        public string ? Phone { get; set; }
+        public string ? City { get; set; }
+        public string? Address { get; set; }
+        public DateTime ? Birthday { get; set; }
+        public int ?ClubCardNumCard { get; set; }
+        public ClubCard ?ClubCard { get; set; }
+
+
         //public int EmployerId { get; set; }
         //static Customer()
         //{

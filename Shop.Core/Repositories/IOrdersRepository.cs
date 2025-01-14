@@ -11,7 +11,7 @@ namespace Shop.Core.Repositories
     {
         List<Order> GetOrders();
         Order GetOrderById(int orderId);
-        int AddOrder (int custId);
+        int AddOrder (string Identity);
 
     }
 }

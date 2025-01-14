@@ -1,4 +1,5 @@
-﻿using Shop.Core.Entities;
+﻿using Microsoft.EntityFrameworkCore;
+using Shop.Core.Entities;
 using Shop.Core.Repositories;
 using System;
 using System.Collections.Generic;
@@ -21,7 +22,7 @@ namespace Shop.Data.Repositories
         {
             if (_context.Products.ToList().Count == 0)
                 Console.WriteLine("there is'nt products");
-            return _context.Products.ToList();
+            return _context.Products.Include(p=>p.Orders).ToList();
         }
         public Product GetProductById(int productId)
         {
@@ -34,7 +35,7 @@ namespace Shop.Data.Repositories
         }
         public bool AddProduct(Product product)
         {
-            //Product p = new Product() {Name=name,Price=price,Amount=amount,Description=description };
+            Product p = new Product() {Name=product.Name,Price=product.Price,Amount=product.Amount,Description=product.Description };
             _context.Products.Add(product);
             _context.SaveChanges();
             return true;
@@ -78,6 +79,7 @@ namespace Shop.Data.Repositories
             Product p = _context.Products.ToList().Find(item => item.Id == productId);
             if (p != null)
             {
+                p.Amount = 0;
                 p.IsExist = false;
                 _context.SaveChanges();
             }

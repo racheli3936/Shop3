@@ -10,8 +10,8 @@ namespace Shop.Core.Services
     public interface IBuyingService
     {
         Order GetBuyingS(int orderId);
-        bool AddProductBuyS(Product product, int orderId);
-        bool AddAmountBuyS(Product product, int orderId);
-        bool DeleteProductBuyS(Product product, int orderId);
+        bool AddProductBuyS(int productId, int orderId);
+        bool AddAmountBuyS(int productId, int orderId);
+        bool DeleteProductBuyS(int productId, int orderId);
     }
 }

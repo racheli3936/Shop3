@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
+using Shop.Core.DTOs;
 using Shop.Core.Entities;
 using Shop.Core.Services;
 
@@ -11,21 +13,26 @@ namespace Shop.API.Controllers
     public class CustomerController : ControllerBase
     {
         private readonly ICustomerService _customerService;
-        public CustomerController(ICustomerService customerService)
+        private readonly IMapper _mapper;
+        public CustomerController(ICustomerService customerService,IMapper mapper)
         {
             _customerService = customerService;
+            _mapper=mapper;
         }
 
         [HttpGet("manager/{password}")]
-        public List<Customer> Get(int password)
+        public List<CustomerDto> Get(int password)
         {
-
-            return _customerService.GetAllCustomersS(password);
+            List<Customer> result = _customerService.GetAllCustomersS(password);
+            List<CustomerDto> listDto = _mapper.Map<List<CustomerDto>>(result);
+            return listDto;
         }
         [HttpGet("customer/{identity}")]
-        public Customer Get(string identity)
+        public CustomerDto Get(string identity)
         {
-            return _customerService.GetCustomerByIdS(identity);
+            Customer customer= _customerService.GetCustomerByIdS(identity);
+            CustomerDto custDto=_mapper.Map<CustomerDto>(customer);
+            return custDto;
         }
         //// POST api/<ClubCardController>
         [HttpPost()]
@@ -35,7 +42,7 @@ namespace Shop.API.Controllers
         }
 
         //// PUT api/<ClubCardController>/5
-        [HttpPut()]
+        [HttpPut()]//update Score in the clubCard
         public void Put(string custIdentity, double sumPay)
         {
             _customerService.UpdatePointsS(custIdentity, sumPay);

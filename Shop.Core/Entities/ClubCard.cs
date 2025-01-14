@@ -12,9 +12,9 @@ namespace Shop.Core.Entities
         //static int clubCardId;
         [Key]
         public int NumCard { get; set; }
-       // public Customer Customer { get; set; }
-        public int NumPoint { get; set; }
-        public DateTime DateOfJoin { get; set; }
+        // public Customer Customer { get; set; }
+        public int NumPoint { get; set; } = 0;
+        public DateTime  DateOfJoin { get; set; }= DateTime.Now;
 
         //static ClubCard()
         //{

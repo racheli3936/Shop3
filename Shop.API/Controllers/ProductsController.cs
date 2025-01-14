@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
+using Shop.Core.DTOs;
 using Shop.Core.Entities;
 using Shop.Core.Services;
 using Shop.Service;
@@ -10,28 +12,35 @@ namespace Shop.API.Controllers
     [ApiController]
     public class ProductsController : ControllerBase
     {
+        
         private readonly IProductService _productService;
-        public ProductsController(IProductService productService)
+        private readonly IMapper _mapper;
+        public ProductsController(IProductService productService,IMapper mapper)
         {
             _productService = productService;
+            _mapper = mapper;
         }
         // GET: api/<ProductsController>
         [HttpGet]
-        public IEnumerable<Product> Get()
+        public IEnumerable<ProductDto> Get()
         {
-            return _productService.GetListS();
+            List<Product> products = _productService.GetListS();
+            List<ProductDto> listDto = _mapper.Map<List<ProductDto>>(products);
+            return listDto;
         }
 
         // GET api/<ProductsController>/5
         [HttpGet("{id}")]
-        public Product Get(int id)
+        public ProductDto Get(int id)
         {
-            return _productService.GetProductByIdS(id);
+            Product product=_productService.GetProductByIdS(id);
+            ProductDto prodDto=_mapper.Map<ProductDto>(product);
+            return prodDto;
         }
 
         // POST api/<ProductsController>
         //// POST api/<ProductsController>
-        [HttpPost()]
+        [HttpPost]
         public ActionResult<bool> Post([FromBody] Product product)
         {
             bool flag = _productService.AddProductS(product);
@@ -44,20 +53,20 @@ namespace Shop.API.Controllers
         }
 
         //// PUT api/<ProductsController>/5
-        [HttpPut("updateAmount/{id}/{numNews}")]
-        public void Put([FromBody] int productId, int numNews)
+        [HttpPut("updateAmount/{productId}")]
+        public void Put([FromBody] int numNews, int productId)
         {
             _productService.UpdateAmountS(productId, numNews);
         }
         //// PUT api/<ProductsController>/5
-        [HttpPut("updatePrice/{id}/{newPrice}")]
-        public void Put(int productId, double newPrice)
+        [HttpPut("updatePrice/{productId}")]
+        public void Put([FromBody] double newPrice,int productId)
         {
             _productService.UpdatePriceS(productId, newPrice);
         }
 
         //// DELETE api/<ProductsController>/5
-        [HttpDelete("{id}")]
+        [HttpDelete("{productId}")]
         public void Delete(int productId)
         {
             _productService.DeleteProductS(productId);

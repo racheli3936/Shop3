@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace Shop.Core.Entities
@@ -12,11 +13,12 @@ namespace Shop.Core.Entities
         //static int orderId;
         [Key]
         public int Id { get; set; }
-        public int CustId { get; set; }
-        public DateTime DateOrder { get; set; }
-        public List<Product> AllProducts { get; set; }
+        //public int CustId { get; set; }
+        public Customer Customer { get; set; }
+        public DateTime? DateOrder { get; set; }
+        public List<Product>? AllProducts { get; set; }
         public double SumBuying { get; set; }
-        public int EmployeeId { get; set; }
+        //public int EmployeeId { get; set; }
         //static Order()
         //{
         //    orderId = 1;

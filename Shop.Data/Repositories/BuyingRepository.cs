@@ -1,4 +1,5 @@
-﻿using Shop.Core.Entities;
+﻿using Microsoft.EntityFrameworkCore;
+using Shop.Core.Entities;
 using Shop.Core.Repositories;
 using System;
 using System.Collections.Generic;
@@ -17,12 +18,12 @@ namespace Shop.Data.Repositories
         }
         public Order GetBuying(int orderId)
         {
-            Order o = _context.Orders.FirstOrDefault(ord => ord.Id == orderId);
+            Order o = _context.Orders.Include(order=>order.AllProducts).Include(order=>order.Customer).FirstOrDefault(ord => ord.Id == orderId);
             return o;
         }
-        public bool AddProductBuy(Product product, int orderId)//add a product to the order
+        public bool AddProductBuy(int productId, int orderId)//add a product to the order
         {
-            Order o = _context.Orders.ToList().Find(item => item.Id == orderId);
+            Order o = _context.Orders.Include(o=>o.AllProducts).ToList().Find(item => item.Id == orderId);
             if (o == null)
             {
                 Console.WriteLine("there is'nt such order");
@@ -30,14 +31,17 @@ namespace Shop.Data.Repositories
             }
             else
             {
-               // Product p = _context.Products.ToList().Find(prod => prod.Id == productId);
-                if (product != null)
+                Product p = _context.Products.Include(p=>p.Orders).ToList().Find(prod => prod.Id == productId);
+                if (p != null)
                 {
-                    if (product.Amount > 0)
+                    if (p.Amount > 0)
                     {
-                        o.AllProducts.Add(product);
-                        product.Amount--;
-                        o.SumBuying += product.Price;
+                        o.AllProducts.Add(p);
+                        p.Amount--;
+
+                        o.SumBuying += p.Price;
+                        p.Orders.Add(o);
+                        _context.SaveChanges();
                         return true;
                     }
                     else
@@ -50,15 +54,15 @@ namespace Shop.Data.Repositories
                     Console.WriteLine("mistake in the product you sent!");
                 }
             }
-            _context.SaveChanges();
+            
             return false;
         }
-        public bool AddAmountBuy(Product product, int orderId)//add amount to an exists product
+        public bool AddAmountBuy(int productId, int orderId)//add amount to an exists product
         {
-            Order o = _context.Orders.ToList().Find(item => item.Id == orderId);
+            Order o = _context.Orders.Include(order=>order.AllProducts).ToList().Find(item => item.Id == orderId);
             if (o != null)
             {
-                //Product p = o.AllProducts.Find(p => p.Id == productId);
+                Product product = _context.Products.ToList().Find(item => item.Id == productId);
                 if (product != null)
                 {
                     if (product.Amount > 0)
@@ -87,22 +91,29 @@ namespace Shop.Data.Repositories
             return false ;
         }
 
-        public bool DeleteProductBuy(Product product, int orderId)
+        public bool DeleteProductBuy(int productId, int orderId)
         {
-            Order o = _context.Orders.ToList().Find(order => order.Id == orderId);
+            Order o = _context.Orders.Include(order=>order.AllProducts).ToList().Find(order => order.Id == orderId);
             if (o != null)
             {
-                o.AllProducts.Remove(_context.Products.ToList().Find(item => item.Id == product.Id));
-                _context.SaveChanges();
-                return true;
+                Product product = _context.Products.ToList().Find(prod => prod.Id == productId);
+                if(product!=null)
+                {
+                    o.AllProducts.Remove(product);
+                    o.SumBuying -= product.Price;
+                    _context.SaveChanges();
+                    return true;
+                }
+                else
+                {
+                    Console.WriteLine("there isnt such a product in this shop!");
+                }
             }
             else
             {
                 Console.WriteLine("there is'nt such an order");
-                return false;            
-            } 
-           
+            }  
+            return false;  
         }
-       
     }
 }

@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
+using Shop.Core.DTOs;
 using Shop.Core.Entities;
 using Shop.Core.Services;
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -10,31 +12,38 @@ namespace Shop.API.Controllers
     public class OrdersController : ControllerBase
     {
         private readonly IOrdersService _ordersService;
-        public OrdersController(IOrdersService ordersService)
+        private readonly IMapper _mapper;
+        public OrdersController(IOrdersService ordersService,IMapper mapper)
         {
             this._ordersService = ordersService;
+            _mapper = mapper;   
         }
 
         // GET: api/<Orders>
 
         [HttpGet]
-        public List<Order> Get()//return all orders
+        public List<OrderDto> Get()//return all orders
         {
-            return _ordersService.GetOrdersS();
+            List<Order> orders = _ordersService.GetOrdersS();
+            List<OrderDto> ordDto = _mapper.Map<List<OrderDto>>(orders);
+
+            return ordDto;
         }
 
         // GET api/<OrdersController>/5
-        [HttpGet("{id}")]//return special order
-        public Order Get(int orderId)
+        [HttpGet("{orderId}")]//return special order
+        public OrderDto Get(int orderId)
         {
-            return _ordersService.GetOrderByIdS(orderId);
+            Order order= _ordersService.GetOrderByIdS(orderId);
+            OrderDto orderDto=_mapper.Map<OrderDto>(order);
+            return orderDto;
         }
 
         // POST api/<OrdersController>
         [HttpPost]
-        public int Post([FromBody] int custId)//make a new empty order and return its id
+        public int Post([FromBody] string Identity)//make a new empty order and return its id
         {
-            return _ordersService.AddOrderS(custId);
+            return _ordersService.AddOrderS(Identity);
         }
 
         //// PUT api/<Orders>/5

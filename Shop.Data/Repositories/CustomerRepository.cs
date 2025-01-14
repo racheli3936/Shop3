@@ -1,4 +1,5 @@
-﻿using Shop.Core.Entities;
+﻿using Microsoft.EntityFrameworkCore;
+using Shop.Core.Entities;
 using Shop.Core.Repositories;
 using System;
 using System.Collections.Generic;
@@ -18,7 +19,7 @@ namespace Shop.Data.Repositories
         public List<Customer> GetAllCustomers(int password)
         {
             if (password == _context.managerPassward)
-                return _context.Customers.ToList();
+                return _context.Customers.Include(u=>u.ClubCard).ToList();
             else
             {
                 Console.WriteLine("you haven`t permission");
@@ -27,7 +28,7 @@ namespace Shop.Data.Repositories
         }
         public Customer GetCustomerById(string identity)
         {
-            Customer c = _context.Customers.FirstOrDefault(cust => cust.identity == identity);
+            Customer c = _context.Customers.Include(cust=>cust.ClubCard).FirstOrDefault(cust => cust.Identity == identity);
             if (c == null)
             {
                 Console.WriteLine("you are not a member");
@@ -40,12 +41,14 @@ namespace Shop.Data.Repositories
         {
            // Customer customer = new Customer() {birthday=birthday,identity=identity,name=name,phone=phone,city=city,address=address };
             _context.Employees.ToList().Find(employer => employer.Id == employeeId).NumCustomerEnter++;
+            customer.ClubCard=new ClubCard();
             _context.Customers.Add(customer);
             _context.SaveChanges();
         }
         public void UpdatePoints(string custIdentity, double sumPay)
         {
-            _context.Customers.ToList().Find(cust => cust.identity == custIdentity).ClubCard.NumPoint += (int)(sumPay * 0.1);
+            Customer cust = _context.Customers.Include(c=>c.ClubCard).ToList().Find(cust => cust.Identity == custIdentity);
+       cust.ClubCard.NumPoint+= (int)(sumPay * 0.1);
             _context.SaveChanges();
         }
     }

@@ -10,8 +10,8 @@ namespace Shop.Core.Repositories
     public interface IBuyingRepository
     {
         Order GetBuying(int orderId);
-        bool AddProductBuy(Product product, int orderId);
-        bool AddAmountBuy(Product product, int orderId);
-        bool DeleteProductBuy(Product product, int orderId);
+        bool AddProductBuy(int productId, int orderId);
+        bool AddAmountBuy(int productId, int orderId);
+        bool DeleteProductBuy(int productId, int orderId);
     }
 }

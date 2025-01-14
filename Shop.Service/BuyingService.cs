@@ -20,17 +20,18 @@ namespace Shop.Service
         {
           return  _buyingRepository.GetBuying(orderId);
         }
-        public bool AddProductBuyS(Product product,int odretId)
+        public bool AddAmountBuyS(int productId, int orderId)
         {
-          return _buyingRepository.AddProductBuy(product,odretId);
+          return _buyingRepository.AddAmountBuy(productId,orderId);
         }
-        public bool AddAmountBuyS(Product product, int orderId)
+        public bool AddProductBuyS(int productId, int orderId)
         {
-           return _buyingRepository.AddAmountBuy(product, orderId);
+           return _buyingRepository.AddProductBuy(productId, orderId);
         }
-        public bool DeleteProductBuyS(Product product, int orderId)
+        public bool DeleteProductBuyS(int productId, int orderId)
         {
-           return _buyingRepository.DeleteProductBuy(product, orderId);
+           return _buyingRepository.DeleteProductBuy(productId, orderId);
         }
+
     }
 }

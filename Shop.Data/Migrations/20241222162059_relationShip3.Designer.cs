@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Shop.Data;
 
@@ -11,9 +12,11 @@ using Shop.Data;
 namespace Shop.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20241222162059_relationShip3")]
+    partial class relationShip3
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -73,7 +76,7 @@ namespace Shop.Data.Migrations
                     b.Property<string>("City")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("ClubCardNumCard")
+                    b.Property<int>("ClubCardNumCard")
                         .HasColumnType("int");
 
                     b.Property<string>("Identity")
@@ -134,6 +137,9 @@ namespace Shop.Data.Migrations
                     b.Property<DateTime?>("DateOrder")
                         .HasColumnType("datetime2");
 
+                    b.Property<int>("EmployeeId")
+                        .HasColumnType("int");
+
                     b.Property<double>("SumBuying")
                         .HasColumnType("float");
 
@@ -192,7 +198,9 @@ namespace Shop.Data.Migrations
                 {
                     b.HasOne("Shop.Core.Entities.ClubCard", "ClubCard")
                         .WithMany()
-                        .HasForeignKey("ClubCardNumCard");
+                        .HasForeignKey("ClubCardNumCard")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("ClubCard");
                 });

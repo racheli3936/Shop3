@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http.HttpResults;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Shop.Core.Entities;
 using Shop.Core.Services;
@@ -12,9 +13,11 @@ namespace Shop.API.Controllers
     public class BuyingController : ControllerBase
     {
         private readonly IBuyingService _buyingService;
-        public BuyingController(IBuyingService buyingService)
+        private readonly IMapper _mapper;
+        public BuyingController(IBuyingService buyingService,IMapper mapper)
         {
             _buyingService = buyingService;
+            _mapper = mapper;
         }
         // GET api/<BuyingController>/5
         [HttpGet("{orderId}")]
@@ -25,9 +28,9 @@ namespace Shop.API.Controllers
 
         // POST api/<BuyingController>
         [HttpPost]
-        public ActionResult<bool> Post([FromBody] Product product, int orderId)//add a product to the order
+        public ActionResult<bool> Post(int productId, int orderId)//add a product to the order
         {
-            bool flag = _buyingService.AddProductBuyS(product, orderId);
+            bool flag = _buyingService.AddProductBuyS(productId, orderId);
             if (!flag)
             {
                 return NotFound(false);
@@ -36,19 +39,19 @@ namespace Shop.API.Controllers
         }
 
         //// PUT api/<BuyingController>/5
-        [HttpPut("{id}")]
-        public ActionResult<bool> Put([FromBody] Product product, int orderId)//add amount to an exists product
+        [HttpPut("{orderId}")]
+        public ActionResult<bool> Put(int productId, int orderId)//add amount to an exists product
         {
-            bool flag = _buyingService.AddAmountBuyS(product, orderId);
+            bool flag = _buyingService.AddAmountBuyS(productId, orderId);
             if (!flag) { return NotFound(false); }
             return Ok(true);
         }
 
         //// DELETE api/<BuyingController>/5
         [HttpDelete("{productId}")]//delete a product from the order
-        public ActionResult<bool> Delete([FromBody]Product product, int orderId)
+        public ActionResult<bool> Delete(int productId , int orderId)
         {
-            bool flag = _buyingService.DeleteProductBuyS(product, orderId);
+            bool flag = _buyingService.DeleteProductBuyS(productId, orderId);
             if (!flag) { return NotFound(false); }
             return Ok(true);
         }

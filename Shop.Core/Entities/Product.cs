@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace Shop.Core.Entities
@@ -13,10 +14,12 @@ namespace Shop.Core.Entities
         [Key]
         public int Id { get; set; }
         public string Name { get; set; }
-        public string Description { get; set; }
+        public string? Description { get; set; }
         public double Price { get; set; }
-        public int Amount { get; set; }
-        public bool IsExist { get; set; }
+        public int ? Amount { get; set; }
+        public bool ? IsExist { get; set; }
+        [JsonIgnore]
+        public List<Order>? Orders { get; set; }
         //static Product()
         //{
         //    num_Product = 1;

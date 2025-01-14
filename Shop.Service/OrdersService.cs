@@ -25,9 +25,9 @@ namespace Shop.Service
         {
            return _ordersRepository.GetOrderById(orderId);
         }
-        public int AddOrderS(int custId)
+        public int AddOrderS(string Identity)
         {
-           return _ordersRepository.AddOrder(custId);
+           return _ordersRepository.AddOrder(Identity);
         }
     }
 }

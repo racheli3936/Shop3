@@ -11,6 +11,6 @@ namespace Shop.Core.Services
     {
         List<Order> GetOrdersS();
         Order GetOrderByIdS(int orderId);
-        int AddOrderS(int custId);
+        int AddOrderS(string Identity);
     }
 }

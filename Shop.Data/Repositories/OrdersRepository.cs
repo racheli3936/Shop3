@@ -1,4 +1,5 @@
-﻿using Shop.Core.Entities;
+﻿using Microsoft.EntityFrameworkCore;
+using Shop.Core.Entities;
 using Shop.Core.Repositories;
 using System;
 using System.Collections.Generic;
@@ -17,16 +18,18 @@ namespace Shop.Data.Repositories
         }
         public List<Order> GetOrders()
         {
-            return _context.Orders.ToList();
+            return _context.Orders.Include(order => order.Customer).Include(order => order.AllProducts).Include(order=>order.Customer.ClubCard).ToList();
         }
         public Order GetOrderById(int orderId)
         {
-            return _context.Orders.FirstOrDefault(item => item.Id == orderId);
+            return _context.Orders.Include(order=>order.AllProducts).Include(order=>order.Customer).Include(order=>order.Customer.ClubCard).FirstOrDefault(item => item.Id == orderId);
            
         }
-        public int AddOrder(int custId)
+        public int AddOrder(string Identity)
         {
-            Order currentOrder = new Order() { CustId=custId};
+            Customer customer = _context.Customers.First(cust=>cust.Identity==Identity);
+            Order currentOrder = new Order() { Customer = customer,DateOrder=DateTime.Now,SumBuying=0 };
+          
             _context.Orders.Add(currentOrder);
             _context.SaveChanges();
             return currentOrder.Id;
