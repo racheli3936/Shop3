@@ -17,9 +17,9 @@ namespace Shop.Service
         {
             _customerRepository = customerRepository;
         }
-        public List<Customer> GetAllCustomersS(int password)
+        public Task<List<Customer>> GetAllCustomersSAsync(int password)
         {
-            return _customerRepository.GetAllCustomers(password);
+            return _customerRepository.GetAllCustomersAsync(password);
         }
    
         public Customer GetCustomerByIdS(string identity)
@@ -28,11 +28,11 @@ namespace Shop.Service
         }
         public void AddNewCustomerS(Customer customer, int employeeId)
         {
-            _customerRepository.AddNewCustomer(customer,employeeId);
+            _customerRepository.AddNewCustomerAsync(customer,employeeId);
         }
         public void UpdatePointsS(string custIdentity, double sumPay)
         {
-            _customerRepository.UpdatePoints(custIdentity , sumPay);
+            _customerRepository.UpdatePointsAsync(custIdentity , sumPay);
         }
       
     }

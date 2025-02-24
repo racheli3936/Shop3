@@ -35,7 +35,11 @@ namespace Shop.Data.Repositories
         }
         public bool AddProduct(Product product)
         {
-            Product p = new Product() {Name=product.Name,Price=product.Price,Amount=product.Amount,Description=product.Description };
+           // Product p = new Product() {Name=product.Name,Price=product.Price,Amount=product.Amount,Description=product.Description };
+            product.Orders=new List<Order>();
+            if (product.Amount > 0) { 
+                product.IsExist= true;
+            }
             _context.Products.Add(product);
             _context.SaveChanges();
             return true;

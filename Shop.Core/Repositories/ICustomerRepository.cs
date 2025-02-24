@@ -9,10 +9,10 @@ namespace Shop.Core.Repositories
 {
     public interface ICustomerRepository
     {
-        List<Customer> GetAllCustomers(int password);
+        Task<List<Customer>> GetAllCustomersAsync(int password);
         Customer GetCustomerById(string identity);
-        void AddNewCustomer(Customer customer, int employeeId);
-        void UpdatePoints(string custIdentity, double sumPay);
+        void AddNewCustomerAsync(Customer customer, int employeeId);
+        void UpdatePointsAsync(string custIdentity, double sumPay);
 
     }
 }

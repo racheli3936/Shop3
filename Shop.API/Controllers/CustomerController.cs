@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using Shop.API.Models.Customer;
 using Shop.Core.DTOs;
 using Shop.Core.Entities;
 using Shop.Core.Services;
@@ -21,9 +22,9 @@ namespace Shop.API.Controllers
         }
 
         [HttpGet("manager/{password}")]
-        public List<CustomerDto> Get(int password)
+        public async Task<List<CustomerDto>> Get(int password)
         {
-            List<Customer> result = _customerService.GetAllCustomersS(password);
+            List<Customer> result =await _customerService.GetAllCustomersSAsync(password);
             List<CustomerDto> listDto = _mapper.Map<List<CustomerDto>>(result);
             return listDto;
         }
@@ -36,9 +37,10 @@ namespace Shop.API.Controllers
         }
         //// POST api/<ClubCardController>
         [HttpPost()]
-        public void Post([FromBody]Customer customer,int employeeId)
+        public void Post([FromBody]  CustomerPostPut customer, int employeeId)
         {
-            _customerService.AddNewCustomerS(customer, employeeId);
+            Customer customer1=new Customer() { Identity=customer.Identity,Name=customer.Name,City=customer.City,Address=customer.Address,Phone=customer.Phone,Birthday=customer.Birthday};
+            _customerService.AddNewCustomerS(customer1, employeeId);
         }
 
         //// PUT api/<ClubCardController>/5

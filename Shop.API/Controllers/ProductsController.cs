@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using Shop.API.Models.Product;
 using Shop.Core.DTOs;
 using Shop.Core.Entities;
 using Shop.Core.Services;
@@ -41,15 +42,15 @@ namespace Shop.API.Controllers
         // POST api/<ProductsController>
         //// POST api/<ProductsController>
         [HttpPost]
-        public ActionResult<bool> Post([FromBody] Product product)
+        public ActionResult<bool> Post([FromBody] ProductPost product)
         {
-            bool flag = _productService.AddProductS(product);
+            Product product1=new Product() { Description=product.Description,Name=product.Name,Price=product.Price,Amount=product.Amount};
+            bool flag = _productService.AddProductS(product1);
             if (!flag)
             {
                 return NotFound(flag);
             }
             return Ok(flag);
-
         }
 
         //// PUT api/<ProductsController>/5

@@ -16,10 +16,10 @@ namespace Shop.Data.Repositories
         {
             this._context = context;
         }
-        public List<Customer> GetAllCustomers(int password)
+        public async Task<List<Customer>> GetAllCustomersAsync(int password)
         {
             if (password == _context.managerPassward)
-                return _context.Customers.Include(u=>u.ClubCard).ToList();
+                return await _context.Customers.Include(u=>u.ClubCard).ToListAsync();
             else
             {
                 Console.WriteLine("you haven`t permission");
@@ -37,19 +37,19 @@ namespace Shop.Data.Repositories
             return c;
         }
 
-        public void AddNewCustomer(Customer customer,int employeeId)
+        public async void AddNewCustomerAsync(Customer customer,int employeeId)
         {
            // Customer customer = new Customer() {birthday=birthday,identity=identity,name=name,phone=phone,city=city,address=address };
             _context.Employees.ToList().Find(employer => employer.Id == employeeId).NumCustomerEnter++;
             customer.ClubCard=new ClubCard();
             _context.Customers.Add(customer);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
-        public void UpdatePoints(string custIdentity, double sumPay)
+        public async void UpdatePointsAsync(string custIdentity, double sumPay)
         {
             Customer cust = _context.Customers.Include(c=>c.ClubCard).ToList().Find(cust => cust.Identity == custIdentity);
        cust.ClubCard.NumPoint+= (int)(sumPay * 0.1);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
     }
 }

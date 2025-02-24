@@ -26,7 +26,6 @@ namespace Shop.API.Controllers
         {
             List<Order> orders = _ordersService.GetOrdersS();
             List<OrderDto> ordDto = _mapper.Map<List<OrderDto>>(orders);
-
             return ordDto;
         }
 

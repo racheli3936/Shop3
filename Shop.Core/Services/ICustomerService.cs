@@ -9,7 +9,7 @@ namespace Shop.Core.Services
 {
     public interface ICustomerService
     {
-        List<Customer> GetAllCustomersS(int password);
+        Task<List<Customer>> GetAllCustomersSAsync(int password);
         Customer GetCustomerByIdS(string identity);
         void AddNewCustomerS(Customer customer,int employeeId);
         void UpdatePointsS(string custIdentity, double sumPay);
